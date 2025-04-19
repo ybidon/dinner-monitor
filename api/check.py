@@ -47,24 +47,22 @@ def send_email(ip):
         print(f"Failed to send email: {str(e)}")
         return False
 
-class handler(BaseHTTPRequestHandler):
-    def do_GET(self):
-        self.send_response(200)
-        self.send_header('Content-type', 'application/json')
-        self.end_headers()
-        
-        result = check_dns()
-        
-        if result["status"] == "active":
-            send_email(result["ip"])
-            response = {
+def handler(request):
+    result = check_dns()
+    
+    if result["status"] == "active":
+        send_email(result["ip"])
+        return {
+            "statusCode": 200,
+            "body": json.dumps({
                 "message": "DNS record found",
                 "ip": result["ip"]
-            }
-        else:
-            response = {
-                "message": "No DNS record yet"
-            }
-            
-        self.wfile.write(json.dumps(response).encode())
-        return 
+            })
+        }
+    
+    return {
+        "statusCode": 200,
+        "body": json.dumps({
+            "message": "No DNS record yet"
+        })
+    } 

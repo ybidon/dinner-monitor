@@ -1,7 +1,7 @@
 {
   "version": 2,
   "functions": {
-    "api/check.py": {
+    "api/*.py": {
       "memory": 1024,
       "maxDuration": 10
     }
@@ -9,5 +9,10 @@
   "crons": [{
     "path": "/api/check",
     "schedule": "* * * * *"
-  }]
+  }],
+  "build": {
+    "env": {
+      "PYTHONPATH": "."
+    }
+  }
 } 
